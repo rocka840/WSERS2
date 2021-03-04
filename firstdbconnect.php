@@ -1,16 +1,18 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbName = "wsers2";
 
-//Create connection
-$connection = mysqli_connect($servername, $username, $password, $dbName);
+/*
+we need to run an sql statement 
+that will give us data from ppl table:
+SELECT coloumn_name FROM table_name
+SELECT LastName FROM ppl;
+*/
 
-//Check connection
-if (!$connection){
-    die("Connection failed: " . mysqli_connect_error());
+$mySelect = "SELECT * from ppl";
+$myResult = mysqli_query($connection, $mySelect);
+
+
+while($row = mysqli_fetch_assoc($myResult)){
+    echo $row["LastName"]." ".$row["FirstName"]." is ".$row["Age"]." years old<br>";
 }
-echo "Connected successfully";
 
-?>
+?> 
