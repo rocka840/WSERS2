@@ -11,6 +11,7 @@
 <body>
 
 <?php
+include_once("dbConnect.php");
 /*
 if (
     isset($_POST["FName"])&&
@@ -18,51 +19,82 @@ if (
 ) this is a longer way to do it*/
 
 if (
-    isset($_POST["FName"],
-    $_POST["LName"],
+    isset($_POST["FirstName"],
+    $_POST["LastName"],
     $_POST["Age"],
     $_POST["UserName"],
-    $_POST["Pswrd"],
-    $_POST["RePswrd"])
+    $_POST["Psw"],
+    $_POST["Psw2"],
+    $_POST["COuntry"])
     ) {
         print "We are signed up!";
-        if($_POST["Pswrd"]==$_POST["RePswrd"])
+        if($_POST["Psw"]==$_POST["Psw2"])
         {
             //we are ok -we will start instert this into db
-            include_once("dbConnect.php");
-            $sql = $connection->prepare("INSERT INTO PPL(FirstName, LastName, Age, Username, Pswrd) VALUES(?,?,?,?,?)");
+            
+            $sql = $connection->prepare("INSERT INTO PPL(FirstName, LastName, Age, Username, Psw, ID_COUNTRY) VALUES(?,?,?,?,?,?)");
 
             if(!$sql){
                 print "Error in your sql";
             }
 
-            $sql -> bind_param("ssiss", $_POST["FirstName"],
+            $hashedPassword = password_hash($_POST["Psw"], PASSWORD_BCRYPT);
+
+            $sql -> bind_param("ssissi", $_POST["FirstName"],
                                         $_Post["LastName"],
                                         $_POST["Age"],
                                         $_POST["Username"],
-                                        $_POST["Pswrd"]
+                                        $hashedpassword,
+                                        $_POST["Country"]
                                                         );
 
-     $sql->execute(); //run this
-        } 
-        else {
-            //NOT OK
-            print "The two passwords DONT match, please try again";
-        }
+     $resultOfExecute = $sql->execute();
+     if ($resultOfExecute)
+     {
+         print "We are done. Please check the database...";
+     } else 
+     {
+         print 'Passwords not matching!';
+     }
 
     }
+}
 ?>
 
 
 <h1>Welcome to our page. You will signup here</h1>
 <div class="container">
 <form class="myRegistration" method="POST"><BR>
-    <label for="FName">First Name</label> <input name="FName"><BR>
-    <label for="LName">Last Name</label> <input name="LName"><BR>
+    <label for="FirstName">First Name</label> <input name="FirstName"><BR>
+    <label for="LastName">Last Name</label> <input name="LastName"><BR>
     <label for="Age">Age</label> <input name="Age"><BR>
     <label for="UserName">Username</label> <input name="UserName"><BR>
-    <label for="Pswrd">Password</label> <input name="Pswrd" type="password"><BR>
-    <label for="RePswrd">Re-type Password</label> <input name="RePswrd" type="password"><BR>
+    <label for="Psw">Password</label> <input name="Psw" type="password"><BR>
+    <label for="Psw2">Re-type Password</label> <input name="Psw2" type="password"><BR>
+
+    <label for="Country">Choose your country:</label>
+    <select name="Country">
+
+    <?php
+        $sqlSelect = $connection->prepare("SELECT * from Countries");
+        $selectionWentOK = $sqlSelect->execute();
+
+        if($selectionWentOK){
+
+            $result = $sqlSelect->get_result();
+            while($row=$result->fetch_assoc()){
+                ?>
+                <option><?=$row["CountryName"]?></option>
+                <?php
+            }
+
+        } else {
+            print "Something went wrong when selecting data";
+        }
+        ?>
+
+    </select>
+
     <input type="submit" name="submit">
 </form>
 </body>
