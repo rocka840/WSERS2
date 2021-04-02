@@ -11,7 +11,7 @@
 <body>
     <?php
     include_once("dbConnect.php");
-    if($_SESSION["isUSerLoggedIn"])
+    if($_SESSION["isUserLoggedIn"])
     {
 
         if(isset($_POST["NewCountry"])){
@@ -24,7 +24,7 @@
         }
         
     } else {
-        print "Access denied. Please login first";
+        die("Access denied. Please login first");
     }
     ?>
 
@@ -59,7 +59,8 @@
         ?>
     </table>
 
-
+        <p><a href="login.php">Go back to login page</p>
+        <p><a href="Signup.php">Click here to go to the Signup page</p>
 
 </body>
 </html>

@@ -78,5 +78,8 @@ if($_SESSION["isUserLoggedIn"]){
 
 ?>
 
+
+<p><a href="newCountry.php">Click here to Create a new Country</p>
+
 </body>
 </html>

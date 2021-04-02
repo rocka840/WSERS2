@@ -1,6 +1,6 @@
--- drop database wsers2;
+drop database wsers2;
 
-create or replace database wsers2;
+create database wsers2;
 use wsers2;
 
 Create table Countries (
@@ -18,6 +18,7 @@ CREATE TABLE PPL (
     Psw varchar(100) NOT NULL,
     primary key (ID_PERSON),
     ID_COUNTRY int not null,
-    foreign key (ID_COUNTRY) references Countries(ID_COUNTRY),
-    primary key (ID_PERSON)
+    foreign key (ID_COUNTRY) references Countries(ID_COUNTRY)
 );
+
+Insert into Countries (CountryName) values ("Luxembourg");
