@@ -17,8 +17,8 @@ CREATE TABLE PPL (
     UserName varchar(20) NOT NULL UNIQUE,
     Psw varchar(100) NOT NULL,
     primary key (ID_PERSON),
-    ID_COUNTRY int not null,
-    foreign key (ID_COUNTRY) references Countries(ID_COUNTRY)
+    ID_COUNTRY int,
+    foreign key (ID_COUNTRY) references Countries(ID_COUNTRY) ON DELETE SET NULL
 );
 
 Insert into Countries (CountryName) values ("Luxembourg");
